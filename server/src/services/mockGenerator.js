@@ -2,6 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 import { db, resetDb } from '../data/store.js';
 import { recomputeAllTiers } from './tiering.js';
 
+const depts = ['Engineering', 'Finance', 'Marketing', 'Operations', 'Sales'];
+const roles = ['Analyst', 'Developer', 'Manager', 'Designer', 'Engineer'];
 const locations = ['Austin', 'London', 'Bangalore', 'Berlin', 'Toronto'];
 const gpuModels = ['Intel Iris Xe', 'NVIDIA T1000', 'NVIDIA RTX 3060', 'AMD Radeon Pro', 'NVIDIA RTX 4090'];
 const cpuModels = ['Intel i5', 'Intel i7', 'AMD Ryzen 7', 'Apple M2', 'Intel Xeon'];
@@ -54,6 +56,13 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
       name: cycle ? `${profile.name} ${cycle + 1}` : profile.name,
       department: profile.department,
       role: profile.role,
+    const seedTier = (i % 4) + 1;
+
+    const employee = {
+      id: employeeId,
+      name: `Employee ${i + 1}`,
+      department: pick(depts),
+      role: pick(roles),
       location: pick(locations)
     };
 
@@ -65,12 +74,16 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
       gpuModel: pick(hardwareProfile.gpuPool.length ? hardwareProfile.gpuPool : gpuModels),
       ramGb: Math.round(rand(...hardwareProfile.ram)),
       cpuModel: pick(hardwareProfile.cpuPool.length ? hardwareProfile.cpuPool : cpuModels)
+      gpuModel: pick(gpuModels),
+      ramGb: Math.round(rand(8, 64)),
+      cpuModel: pick(cpuModels)
     };
 
     db.employees.push(employee);
     db.devices.push(device);
 
     const telemetryProfile = buildProfile(seedTier);
+    const profile = buildProfile(seedTier);
     for (let s = 0; s < samplesPerDevice; s += 1) {
       const minutesAgo = samplesPerDevice - s;
       db.telemetry.push({
@@ -82,6 +95,11 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
         gpuUtilPct: Number(rand(...telemetryProfile.gpu).toFixed(1)),
         diskUtilPct: Number(rand(...telemetryProfile.disk).toFixed(1)),
         netMbps: Number(rand(...telemetryProfile.net).toFixed(1))
+        cpuUtilPct: Number(rand(...profile.cpu).toFixed(1)),
+        ramUtilPct: Number(rand(...profile.ram).toFixed(1)),
+        gpuUtilPct: Number(rand(...profile.gpu).toFixed(1)),
+        diskUtilPct: Number(rand(...profile.disk).toFixed(1)),
+        netMbps: Number(rand(...profile.net).toFixed(1))
       });
     }
   }

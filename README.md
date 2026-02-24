@@ -74,3 +74,10 @@ Includes payload mapping for:
 8. Inspect device info + 30-minute telemetry chart (CPU/RAM/GPU).
 9. Review “Tier Explanation” reason and threshold breakdown + ServiceNow action placeholder panel.
 10. Click **Regenerate Mock Data** to simulate a new telemetry snapshot and tier assignments.
+2. Open dashboard at `http://localhost:5173`.
+3. Review KPI cards: employee/device counts, tier distribution, top tier-4 users.
+4. Use filters (department, tier, search) to narrow the table.
+5. Click an employee name to open detail view.
+6. Inspect device info + 30-minute telemetry chart (CPU/RAM/GPU).
+7. Review “Tier Explanation” reason and threshold breakdown.
+8. Click **Regenerate Mock Data** to simulate a new telemetry snapshot and tier assignments.
