@@ -12,6 +12,24 @@ const osList = ['Windows 11', 'macOS Sonoma', 'Ubuntu 22.04'];
 const rand = (min, max) => Math.random() * (max - min) + min;
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 
+const employeesCatalog = [
+  { name: 'Avery Brooks', department: 'Operations', role: 'Office Coordinator', preferredTier: 1 },
+  { name: 'Sofia Patel', department: 'Finance', role: 'AP Specialist', preferredTier: 1 },
+  { name: 'Noah Kim', department: 'Sales', role: 'Account Executive', preferredTier: 2 },
+  { name: 'Maya Chen', department: 'Marketing', role: 'Campaign Manager', preferredTier: 2 },
+  { name: 'Lucas Silva', department: 'Engineering', role: 'Frontend Engineer', preferredTier: 3 },
+  { name: 'Zara Nguyen', department: 'Data', role: 'Analytics Engineer', preferredTier: 3 },
+  { name: 'Ethan Walker', department: 'Design', role: '3D Artist', preferredTier: 4 },
+  { name: 'Priya Raman', department: 'Engineering', role: 'ML Engineer', preferredTier: 4 }
+];
+
+const hardwareByTier = {
+  1: { ram: [8, 16], gpuPool: ['Intel Iris Xe'], cpuPool: ['Intel i5', 'Apple M2'] },
+  2: { ram: [16, 24], gpuPool: ['Intel Iris Xe', 'NVIDIA T1000'], cpuPool: ['Intel i7', 'AMD Ryzen 7'] },
+  3: { ram: [24, 48], gpuPool: ['NVIDIA RTX 3060', 'AMD Radeon Pro'], cpuPool: ['Intel i7', 'AMD Ryzen 7', 'Intel Xeon'] },
+  4: { ram: [32, 64], gpuPool: ['NVIDIA RTX 4090', 'NVIDIA RTX 3060'], cpuPool: ['Intel Xeon', 'AMD Ryzen 7'] }
+};
+
 const buildProfile = (seedTier) => {
   const profileByTier = {
     1: { cpu: [5, 25], ram: [10, 35], gpu: [1, 10], disk: [5, 25], net: [5, 30] },
@@ -28,6 +46,16 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
   for (let i = 0; i < employeesCount; i += 1) {
     const employeeId = uuidv4();
     const deviceId = uuidv4();
+    const profile = employeesCatalog[i % employeesCatalog.length];
+    const seedTier = profile.preferredTier;
+    const hardwareProfile = hardwareByTier[seedTier];
+
+    const cycle = Math.floor(i / employeesCatalog.length);
+    const employee = {
+      id: employeeId,
+      name: cycle ? `${profile.name} ${cycle + 1}` : profile.name,
+      department: profile.department,
+      role: profile.role,
     const seedTier = (i % 4) + 1;
 
     const employee = {
@@ -43,6 +71,9 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
       employeeId,
       hostname: `corp-lt-${1000 + i}`,
       os: pick(osList),
+      gpuModel: pick(hardwareProfile.gpuPool.length ? hardwareProfile.gpuPool : gpuModels),
+      ramGb: Math.round(rand(...hardwareProfile.ram)),
+      cpuModel: pick(hardwareProfile.cpuPool.length ? hardwareProfile.cpuPool : cpuModels)
       gpuModel: pick(gpuModels),
       ramGb: Math.round(rand(8, 64)),
       cpuModel: pick(cpuModels)
@@ -51,6 +82,7 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
     db.employees.push(employee);
     db.devices.push(device);
 
+    const telemetryProfile = buildProfile(seedTier);
     const profile = buildProfile(seedTier);
     for (let s = 0; s < samplesPerDevice; s += 1) {
       const minutesAgo = samplesPerDevice - s;
@@ -58,6 +90,11 @@ export const generateMockData = ({ employeesCount = 24, samplesPerDevice = 30 } 
         id: uuidv4(),
         timestamp: new Date(Date.now() - minutesAgo * 60 * 1000).toISOString(),
         deviceId,
+        cpuUtilPct: Number(rand(...telemetryProfile.cpu).toFixed(1)),
+        ramUtilPct: Number(rand(...telemetryProfile.ram).toFixed(1)),
+        gpuUtilPct: Number(rand(...telemetryProfile.gpu).toFixed(1)),
+        diskUtilPct: Number(rand(...telemetryProfile.disk).toFixed(1)),
+        netMbps: Number(rand(...telemetryProfile.net).toFixed(1))
         cpuUtilPct: Number(rand(...profile.cpu).toFixed(1)),
         ramUtilPct: Number(rand(...profile.ram).toFixed(1)),
         gpuUtilPct: Number(rand(...profile.gpu).toFixed(1)),

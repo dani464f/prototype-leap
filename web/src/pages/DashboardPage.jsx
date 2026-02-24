@@ -3,6 +3,12 @@ import { api } from '../services/api';
 import KpiCards from '../components/KpiCards';
 import EmployeeTable from '../components/EmployeeTable';
 
+const placeholders = [
+  { title: 'Incident Correlation (Placeholder)', body: 'Link high-tier users with open incidents once ServiceNow incident data is connected.' },
+  { title: 'Upgrade Recommendations (Placeholder)', body: 'Auto-generate hardware refresh recommendations for Tier 4 users with sustained high intensity.' },
+  { title: 'Budget Forecast (Placeholder)', body: 'Estimate annual hardware budget impact from projected tier migration over the next 2 quarters.' }
+];
+
 const DashboardPage = () => {
   const [rows, setRows] = useState([]);
   const [filters, setFilters] = useState({ department: 'All', tier: 'All', query: '' });
@@ -40,6 +46,14 @@ const DashboardPage = () => {
         <input placeholder="Search name or hostname" value={filters.query} onChange={(e) => setFilters((f) => ({ ...f, query: e.target.value }))} />
       </section>
       <EmployeeTable rows={filtered} />
+      <section className="placeholder-grid">
+        {placeholders.map((item) => (
+          <article className="card placeholder-card" key={item.title}>
+            <h3>{item.title}</h3>
+            <p>{item.body}</p>
+          </article>
+        ))}
+      </section>
     </div>
   );
 };

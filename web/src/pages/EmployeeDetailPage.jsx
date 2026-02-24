@@ -51,6 +51,10 @@ const EmployeeDetailPage = () => {
           Thresholds: T1 &lt;20 + low GPU; T2 20-45; T3 45-70 or GPU≥40 & RAM≥50; T4 ≥70 or GPU≥70 or RAM≥85 & CPU≥75.
         </p>
       </section>
+      <section className="card placeholder-card">
+        <h3>ServiceNow Actions (Placeholder)</h3>
+        <p>Create incident, open asset record, and submit hardware refresh workflow from this panel.</p>
+      </section>
     </div>
   );
 };

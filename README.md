@@ -65,6 +65,15 @@ Includes payload mapping for:
 
 ## Demo Script
 1. Start app with `npm run dev`.
+2. Observe realistic sample personas already seeded across all four tiers (office coordinators, analysts, engineers, and ML/3D power users).
+3. Open dashboard at `http://localhost:5173`.
+4. Review KPI cards: employee/device counts, tier distribution, top tier-4 users.
+5. Use filters (department, tier, search) to narrow the table.
+6. Review placeholder cards for future incident correlation, upgrade recommendations, and budget forecasting.
+7. Click an employee name to open detail view.
+8. Inspect device info + 30-minute telemetry chart (CPU/RAM/GPU).
+9. Review “Tier Explanation” reason and threshold breakdown + ServiceNow action placeholder panel.
+10. Click **Regenerate Mock Data** to simulate a new telemetry snapshot and tier assignments.
 2. Open dashboard at `http://localhost:5173`.
 3. Review KPI cards: employee/device counts, tier distribution, top tier-4 users.
 4. Use filters (department, tier, search) to narrow the table.
